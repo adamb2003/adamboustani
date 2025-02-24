@@ -4,15 +4,20 @@ import { Button } from "./Button";
 import { db } from "../firebase";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { Link } from "react-router-dom";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
 
 function Footer() {
   const [message, setMessage] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState("");
 
   const sendMessage = async (e) => {
     e.preventDefault();
 
     if (message.trim() === "") {
-      alert("Please enter a message!");
+      setSnackbarMessage("Please enter a message!");
+      setOpenSnackbar(true);
       return;
     }
 
@@ -21,11 +26,18 @@ function Footer() {
         text: message,
         timestamp: serverTimestamp(),
       });
-      alert("Message sent!");
+      setSnackbarMessage("Message sent!");
+      setOpenSnackbar(true);
       setMessage("");
     } catch (error) {
       console.error("Error sending message:", error);
+      setSnackbarMessage("Error sending message.");
+      setOpenSnackbar(true);
     }
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
@@ -48,6 +60,24 @@ function Footer() {
           </form>
         </div>
       </section>
+
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        anchorOrigin={{
+          vertical: "top",
+          horizontal: "center",
+        }}
+      >
+        <Alert
+          onClose={handleCloseSnackbar}
+          severity={snackbarMessage === "Message sent!" ? "success" : "error"}
+          sx={{ width: "100%" }}
+        >
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
 
       <section className="social-media">
         <div className="social-media-wrap">
