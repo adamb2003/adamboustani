@@ -6,7 +6,14 @@ import "./HeroSection.css";
 function HeroSection() {
   return (
     <div className="hero-container">
-      <video src={require("../videos/hero.mp4")} autoPlay loop muted />
+      <video
+        src={require("../videos/hero.mp4")}
+        autoPlay
+        loop
+        muted
+        defaultMuted
+        playsInline
+      />
       <h1> ADAM BOUSTANI </h1>
       <div className="hero-btns">
         <Button
